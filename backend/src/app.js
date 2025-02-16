@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./dataBaseConnect.js";
+import Post from "./model/postmodel.js";
+import router from "./routes/postroutes.js";
 
 dotenv.config();
 connectDB();
@@ -11,18 +13,14 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/api",router);
 
 // Basic Route
 app.get("/", (req, res) => {
   res.send("Welcome to the Express Server!");
 });
 
-app.post("/api/createpost",(req,res) => {
-    const {title,description} = req.body;
-    console.log(title);
-    console.log(description);
-    res.send("ok");    
-})
+
 
 // Start Server
 app.listen(PORT, () => {
