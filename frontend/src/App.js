@@ -2,17 +2,15 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import { FaCirclePlus } from "react-icons/fa6";
 
+import AddPost from "./components/addPost.js";
+import LoadingSpinner from "./components/loadingSpinner.js";
+import UpdatePost from "./components/updatePost.js";
+import PostList from "./components/postList.js";
+import NotFount from "./components/notFount.js";
 
 function App() {
-  return (
-  <>
-  <Row>
-    <Col>
-    <h1 className="display-6 text-center">CRUD Operations</h1>
-    <h1><FaCirclePlus></FaCirclePlus></h1>
-    </Col>
-  </Row>
-  </>
-)};
+  //return addPost();
+  return < UpdatePost />
+};
 
 export default App;
