@@ -10,7 +10,8 @@ import NotFount from "./components/notFount.js";
 
 function App() {
   //return addPost();
-  return < UpdatePost />
+  //return < PostList />
+  return < LoadingSpinner />
 };
 
 export default App;

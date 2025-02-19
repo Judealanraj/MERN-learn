@@ -1,11 +1,16 @@
-import React from 'react'
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
 
-function NotFount() {
+function NotFound() {
   return (
-    <div>
-      NotFound
-    </div>
-  )
+    <Container>
+      <Row>
+        <Col className="mt-5 text-center">
+          <h1 className="display-6">Page not found</h1>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
 
-export default NotFount
+export default NotFound;
