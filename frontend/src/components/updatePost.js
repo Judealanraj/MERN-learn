@@ -1,33 +1,34 @@
-import React, { useState } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
+import React, { useState } from "react";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
+import { Link } from "react-router-dom";
 
 function UpdatePost() {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setLoading(true);
-    
+
     // Simulate form submission
     setTimeout(() => {
       console.log({ title, description });
       setLoading(false);
-      setTitle('');
-      setDescription('');
-      alert('Post submitted successfully!');
+      setTitle("");
+      setDescription("");
+      alert("Post submitted successfully!");
     }, 1500);
   };
 
   const handleCancel = () => {
-    setTitle('');
-    setDescription('');
+    setTitle("");
+    setDescription("");
   };
 
   return (
@@ -38,31 +39,42 @@ function UpdatePost() {
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formTitle" className="mb-3">
               <Form.Label>Title</Form.Label>
-              <Form.Control 
-                type="text" 
-                placeholder="Enter title" 
-                value={title} 
-                onChange={(e) => setTitle(e.target.value)} 
-                required 
+              <Form.Control
+                type="text"
+                placeholder="Enter title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
               />
             </Form.Group>
-            
+
             <Form.Group controlId="formDescription" className="mb-3">
               <Form.Label>Description</Form.Label>
-              <Form.Control 
-                as="textarea" 
-                rows={3} 
-                placeholder="Enter description" 
-                value={description} 
-                onChange={(e) => setDescription(e.target.value)} 
-                required 
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="Enter description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
               />
             </Form.Group>
-            
-            <Button variant="success" type="submit" disabled={loading} className="me-2">
-              {loading ? <Spinner as="span" animation="border" size="sm" /> : 'Update'}
+
+            <Button
+              variant="success"
+              type="submit"
+              disabled={loading}
+              className="me-2"
+            >
+              {loading ? (
+                <Spinner as="span" animation="border" size="sm" />
+              ) : (
+                "Update"
+              )}
             </Button>
-            <Button variant="secondary" type="button" onClick={handleCancel}>Cancel</Button>
+            <Button variant="secondary" type="button" onClick={handleCancel}>
+              <Link to={"/"} style={{textDecoration:"none", color:"white"}}>Cancel</Link>
+            </Button>
           </Form>
         </Col>
       </Row>

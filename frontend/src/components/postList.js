@@ -9,6 +9,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { AiFillDelete } from "react-icons/ai";
 import { AiOutlineEdit } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const dataSet = [
   { _id: 1, title: "afadvsd", description: "zcdasdca" },
@@ -28,7 +29,9 @@ function PostList() {
   return (
     <Container className="mt-5">
       <Button size="lg" variant="success">
-        Create Post <BsPlusCircleFill />
+        <Link to={"/create"} style={{textDecoration:"none", color:"white"}}>
+          Create Post <BsPlusCircleFill />
+        </Link>
       </Button>
 
       <Row className="mt-3" sm={1} md={3}>
@@ -41,7 +44,7 @@ function PostList() {
                     <Card.Title>{post.title}</Card.Title>
                   </Col>
                   <Col>
-                    <AiOutlineEdit className="text-primary" role="button" />
+                    <Link to={`/update/${post._id}`}><AiOutlineEdit className="text-primary" role="button" /></Link>
                   </Col>
                   <Col>
                     <AiFillDelete
