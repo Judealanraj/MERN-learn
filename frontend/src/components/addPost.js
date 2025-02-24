@@ -5,25 +5,40 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 function AddPost() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      console.log({ title, description });
+    if (!title) {
+      alert("please enter title");
+    }
+    if (!description) {
+      alert("please enter description");
+    }
+    try {
+      setLoading(true);
+      const response = await fetch("http://localhost:5000/api/createpost", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title: title, description: description }),
+      });
+      if (response.ok) {
+        navigate("/")
+      }
+    } catch (error) {
+    } finally {
       setLoading(false);
-      setTitle("");
-      setDescription("");
-      alert("Post submitted successfully!");
-    }, 1500);
+    }
   };
 
   const handleCancel = () => {
@@ -40,7 +55,7 @@ function AddPost() {
             <Form.Group controlId="formTitle" className="mb-3">
               <Form.Label>Title</Form.Label>
               <Form.Control
-                type="text"
+                type="title"
                 placeholder="Enter title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -69,6 +84,12 @@ function AddPost() {
               {loading ? (
                 <Spinner as="span" animation="border" size="sm" />
               ) : (
+                // <Link
+                //   to={"/"}
+                //   style={{ textDecoration: "none", color: "white" }}
+                // >
+                //   Submit
+                // </Link>
                 "Submit"
               )}
             </Button>
