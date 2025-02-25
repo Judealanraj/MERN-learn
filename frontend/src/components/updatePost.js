@@ -1,29 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 function UpdatePost() {
+  const params = useParams();
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (event) => {
+  const getSinglePost = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/post/${params.post_id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      const { post } = data;
+      setTitle(post.title);
+      setDescription(post.description);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getSinglePost();
+  }, []);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      console.log({ title, description });
+    if (!title) {
+      alert("please enter title");
+    }
+    if (!description) {
+      alert("please enter description");
+    }
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `http://localhost:5000/api/updatePost/${params.post_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ title: title, description: description }),
+        }
+      );
+      if (response.ok) {
+        navigate("/");
+      }
+    } catch (error) {
+    } finally {
       setLoading(false);
-      setTitle("");
-      setDescription("");
-      alert("Post submitted successfully!");
-    }, 1500);
+    }
   };
 
   const handleCancel = () => {
@@ -41,7 +82,6 @@ function UpdatePost() {
               <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
@@ -53,7 +93,6 @@ function UpdatePost() {
               <Form.Control
                 as="textarea"
                 rows={3}
-                placeholder="Enter description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
@@ -73,7 +112,9 @@ function UpdatePost() {
               )}
             </Button>
             <Button variant="secondary" type="button" onClick={handleCancel}>
-              <Link to={"/"} style={{textDecoration:"none", color:"white"}}>Cancel</Link>
+              <Link to={"/"} style={{ textDecoration: "none", color: "white" }}>
+                Cancel
+              </Link>
             </Button>
           </Form>
         </Col>
