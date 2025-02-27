@@ -66,9 +66,8 @@
 
 // export default PostList;
 
-
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, use } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -82,26 +81,46 @@ function PostList() {
   const [posts, setPosts] = useState([]); // ✅ Initialize posts as an empty array
   const [loading, setLoading] = useState(true); // ✅ Add loading state
   const [error, setError] = useState(null); // ✅ Add error state
-
-  useEffect(() => {
-    const getPosts = async () => {
+  const deletePost = async (id) => {
+    const confirmation = window.confirm("Are you sure to delete");
+    console.log(confirmation);
+    if (confirmation) {
       try {
-        const response = await fetch("http://localhost:5000/api/posts");
+        const response = await fetch(
+          `http://localhost:5000/api/deletePost/${id}`,
+          { method: "DELETE" }
+        );
         if (!response.ok) {
-          throw new Error("Failed to fetch posts"); // ✅ Handle HTTP errors
+          throw new Error("Failed to delete");
+        } else {
+          await getPosts();
         }
-        const data = await response.json();
-        console.log(data);
-        
-        setPosts(data); // ✅ Store posts in state
       } catch (err) {
-        console.error("Error fetching posts:", err);
+        console.error("Error deleting post:", err);
         setError(err.message);
       } finally {
         setLoading(false); // ✅ Stop loading after fetching
       }
-    };
+    }
+  };
+  const getPosts = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/posts");
+      if (!response.ok) {
+        throw new Error("Failed to fetch posts"); // ✅ Handle HTTP errors
+      }
+      const data = await response.json();
+      console.log(data);
 
+      setPosts(data); // ✅ Store posts in state
+    } catch (err) {
+      console.error("Error fetching posts:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false); // ✅ Stop loading after fetching
+    }
+  };
+  useEffect(() => {
     getPosts();
   }, []); // ✅ Empty dependency array to run only on mount
 
@@ -121,7 +140,8 @@ function PostList() {
         <div className="text-danger mt-4">Error: {error}</div> // ✅ Display error message
       ) : (
         <Row className="mt-3" sm={1} md={3}>
-          {posts.map((post) => (
+          {posts.length >0 &&
+          posts.map((post) => (
             <Col key={post._id}>
               <Card className="mb-2">
                 <Card.Body>
@@ -137,7 +157,7 @@ function PostList() {
                     <Col>
                       <AiFillDelete
                         className="text-danger"
-                        onClick={() => {}}
+                        onClick={() => deletePost(post._id)}
                         role="button"
                       />
                     </Col>
@@ -147,6 +167,7 @@ function PostList() {
               </Card>
             </Col>
           ))}
+          {posts.length === 0 && <h1 className="text-center display-6 ">No posts to display</h1>}
         </Row>
       )}
     </Container>
