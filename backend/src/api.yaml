@@ -1,0 +1,270 @@
+openapi: "3.1.1"
+info:
+  title: "MERN CRUD Operation"
+  description: this documentation for CRUD post Operation
+  termsOfService: http://example.com/terms
+  contact:
+    name: API support
+    url: http://example.com/terms
+    email: judealanraj1@gamil.com
+  license:
+    name: Example License
+    url: http://example.com/license.html
+  version: 1.0
+  servers:
+    -url: http://localhost:5000/api-docs
+    description: this is a local server
+  schemes: [http, https]
+  tags:
+    -name: CRUD
+    description: crud ops
+
+paths:
+  /api/posts:
+    get:
+      tags:
+        - CRUD
+      summary: retrieves list of posts
+      description: This endpoint retrieves a list of posts
+      responses:
+        "200":
+          description: succesfull responses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    title:
+                      type: string
+                    description:
+                      type: string
+
+              example:
+                _id: 67bff870a24a241190493b11
+                title: post1
+                description: des1
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: Internal Server Error
+  /api/createPost:
+    post:
+      tags:
+        - CRUD
+      summary: To create a new post
+      description: Creating a new post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "post1"
+                description:
+                  type: string
+                  example: "description1"
+              required:
+                - title
+                - description
+      responses:
+        "201":
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post created successfully"
+                  postId:
+                    type: string
+                    example: "123456"
+        "400":
+          description: Bad Request - Invalid input
+        "500":
+          description: Internal Server Error
+          content: 
+            application/json:
+              schemas:
+                $ref: '#/components/schemas/InternalServerError'
+
+
+  /api/post/{id}:
+    get:
+      tags:
+        - CRUD
+      summary: Retrieve a post by ID
+      description: Fetches the details of a specific post using its unique ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the post to retrieve
+      responses:
+        "200":
+          description: Post retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  postId:
+                    type: string
+                    example: "123456"
+                  title:
+                    type: string
+                    example: "post1"
+                  description:
+                    type: string
+                    example: "description1"
+        "404":
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post not found"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schemas:
+                $ref: '#/components/schemas/InternalServerError'
+
+
+    /api/deletePost/{id}:
+    delete:
+      tags:
+        - CRUD
+      summary: Delete a post by ID
+      description: Deletes a specific post using its unique ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the post to delete
+      responses:
+        "200":
+          description: Post deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post deleted successfully"
+        "404":
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post not found"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schemas:
+                $ref: '#/components/schemas/InternalServerError'
+
+  /api/updatePost/{id}:
+    put:
+      tags:
+        - CRUD
+      summary: Update a post by ID
+      description: Updates the details of a specific post using its unique ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique ID of the post to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Updated post title"
+                description:
+                  type: string
+                  example: "Updated description"
+              required:
+                - title
+                - description
+      responses:
+        "200":
+          description: Post updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post updated successfully"
+        "400":
+          description: Bad Request - Invalid input
+        "404":
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Post not found"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schemas:
+                $ref: '#/components/schemas/InternalServerError'
+
+
+
+
+
+
+                
+
+
+components:
+  schemas:
+    InternalServerError:
+      type: object
+      properties:
+        message:
+          type: string
+     
